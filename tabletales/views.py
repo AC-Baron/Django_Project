@@ -1,12 +1,18 @@
-from django.shortcuts import render
-
-# Create your views here.
-# Testing Index View
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-def index(request):
-    return HttpResponse("Hello, World! This is the Tabletales homepage.")
-
 from .models import Recipe
-def recipe_list(request):
+
+# Homepage view
+def index(request):
     recipes = Recipe.objects.all()
     return render(request, 'index.html', {'recipes': recipes})
+
+# Recipe list view
+def recipe_list(request):
+    recipes = Recipe.objects.all()
+    return render(request, 'recipe_list.html', {'recipes': recipes})
+
+# Recipe detail view
+def recipe_detail(request, pk):
+    recipe = get_object_or_404(Recipe, pk=pk)
+    return render(request, 'recipe_detail.html', {'recipe': recipe})

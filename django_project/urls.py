@@ -16,9 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from tabletales import views as index_views
+from tabletales import views
 
 urlpatterns = [
-    path('', index_views.index, name='index'),
+    path('', views.index, name='index'),
+    path('recipes/', views.recipe_list, name='recipe_list'),
+    path('recipe/<int:pk>/', views.recipe_detail, name='recipe_detail'),
     path('admin/', admin.site.urls),
 ]

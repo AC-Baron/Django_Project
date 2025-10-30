@@ -1,5 +1,5 @@
 """
-URL configuration for my_project project.
+URL configuration for django_project project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from hello_world import views as index_views
+from tabletales import views as index_views
 
 urlpatterns = [
     path('', index_views.index, name='index'),

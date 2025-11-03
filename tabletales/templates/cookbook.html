@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>My Cookbook ❤️</h1>
+
+{% if recipes %}
+  <ul>
+    {% for recipe in recipes %}
+      <li>
+        <a href="{% url 'recipe_detail' recipe.pk %}">{{ recipe.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>You haven’t favorited any recipes yet.</p>
+{% endif %}
+{% endblock %}

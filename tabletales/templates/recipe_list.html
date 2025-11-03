@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Recipe List</h1>
+
+<ul>
+  {% for recipe in recipes %}
+    <li>
+      <a href="{% url 'recipe_detail' recipe.pk %}">{{ recipe.title }}</a><br>
+      <small>By {{ recipe.author.username }} on {{ recipe.created_on|date:"jS F Y" }}</small>
+    </li>
+  {% empty %}
+    <p>No recipes yet!</p>
+  {% endfor %}
+</ul>
+{% endblock %}

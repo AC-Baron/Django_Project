@@ -19,8 +19,10 @@ from django.urls import path, include
 from tabletales import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.recipe_list, name='recipe_list'),
     path('recipes/', views.recipe_list, name='recipe_list'),
     path('recipe/<int:pk>/', views.recipe_detail, name='recipe_detail'),
     path('admin/', admin.site.urls),
+    path('recipe/<int:pk>/favorite/', views.toggle_favorite, name='toggle_favorite'),
+    path('cookbook/', views.cookbook, name='cookbook'),
 ]

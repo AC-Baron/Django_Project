@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Recipe
+from .models import Recipe, Comment
 from django.conf import settings
 
 
@@ -18,7 +19,22 @@ def recipe_list(request):
 # Recipe detail view
 def recipe_detail(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
-    return render(request, 'recipe_detail.html', {'recipe': recipe})
+    comments = recipe.comments.all().order_by('-created_on')
+
+    # Handle comment submission
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            text = request.POST.get("text")
+            if text.strip():
+                Comment.objects.create(recipe=recipe, user=request.user, text=text)
+                return redirect('recipe_detail', pk=pk)
+        else:
+            return redirect('login')
+
+    return render(request, 'recipe_detail.html', {
+        'recipe': recipe,
+        'comments': comments,
+    })
 
 @login_required #Toggle Favourite
 def toggle_favorite(request, pk):
@@ -38,3 +54,7 @@ def toggle_favorite(request, pk):
 def cookbook(request):
     recipes = request.user.favorite_recipes.all()
     return render(request, 'cookbook.html', {'recipes': recipes})
+
+@login_required
+def account(request):
+    return render(request, 'account.html')

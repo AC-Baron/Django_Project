@@ -14,7 +14,16 @@
         <ul class="nav-links">
             <li><a href="{% url 'recipe_list' %}">What's Cooking?</a></li>
             <li><a href="{% url 'cookbook' %}">Cookbook</a></li>
-            <li><a href="#">Account</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'account' %}">Account ({{ user.username }})</a></li>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+
+            {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
         </ul>
     </nav>
 

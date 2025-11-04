@@ -37,4 +37,29 @@
   {% endfor %}
 </ol>
 
+<!-- Comments Section -->
+<h3>Comments</h3>
+
+<div class="comments-section">
+  {% for comment in comments %}
+    <div class="comment">
+      <strong>{{ comment.user.username }}</strong>
+      <p>{{ comment.text }}</p>
+      <small>{{ comment.created_on|date:"jS F Y, g:i a" }}</small>
+    </div>
+  {% empty %}
+    <p>No comments yet. Be the first to comment!</p>
+  {% endfor %}
+</div>
+
+{% if user.is_authenticated %}
+<form method="post" class="comment-form">
+  {% csrf_token %}
+  <textarea name="text" rows="3" placeholder="Add your comment..." required></textarea><br>
+  <button type="submit">Post Comment</button>
+</form>
+{% else %}
+<p><a href="{% url 'login' %}">Log in</a> to post a comment.</p>
+{% endif %}
+
 {% endblock %}

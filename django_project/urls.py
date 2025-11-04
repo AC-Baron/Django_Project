@@ -29,6 +29,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('recipe/<int:pk>/favorite/', views.toggle_favorite, name='toggle_favorite'),
     path('cookbook/', views.cookbook, name='cookbook'),
+
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('account/', views.account, name='account'),
+    path('admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:

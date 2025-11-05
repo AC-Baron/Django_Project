@@ -9,19 +9,13 @@
 
   <p>Email: {{ user.email }}</p>
 
-  <div class="account-actions">
-    <a href="{% url 'logout' %}" class="btn">Logout</a>
-  </div>
+{% if user.is_superuser %}
+    <p><strong>Role:</strong> 🛠️ Admin (Superuser)</p>
+{% elif user.is_staff %}
+    <p><strong>Role:</strong> 👩‍💼 Staff Member</p>
+{% else %}
+    <p><strong>Role:</strong> 👤 Regular User</p>
+{% endif %}
 
-  <hr>
-
-  <h2>My Favorite Recipes</h2>
-  <ul>
-    {% for recipe in user.favorite_recipes.all %}
-      <li><a href="{% url 'recipe_detail' recipe.pk %}">{{ recipe.title }}</a></li>
-    {% empty %}
-      <p>No favorite recipes yet.</p>
-    {% endfor %}
-  </ul>
 </div>
 {% endblock %}

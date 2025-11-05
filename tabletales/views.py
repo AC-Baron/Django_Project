@@ -58,3 +58,37 @@ def cookbook(request):
 @login_required
 def account(request):
     return render(request, 'account.html')
+
+@login_required
+def edit_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    # Only staff/superusers or the comment's author can edit
+    if not (request.user == comment.user or request.user.is_staff or request.user.is_superuser):
+        messages.error(request, "You don't have permission to edit this comment.")
+        return redirect('recipe_detail', pk=comment.recipe.pk)
+
+    if request.method == "POST":
+        new_text = request.POST.get("text")
+        if new_text.strip():
+            comment.text = new_text
+            comment.save()
+            messages.success(request, "Comment updated successfully!")
+            return redirect('recipe_detail', pk=comment.recipe.pk)
+
+    return render(request, 'edit_comment.html', {'comment': comment})
+
+
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    # Only staff/superusers or the comment's author can delete
+    if not (request.user == comment.user or request.user.is_staff or request.user.is_superuser):
+        messages.error(request, "You don't have permission to delete this comment.")
+        return redirect('recipe_detail', pk=comment.recipe.pk)
+
+    recipe_id = comment.recipe.pk
+    comment.delete()
+    messages.success(request, "Comment deleted successfully!")
+    return redirect('recipe_detail', pk=recipe_id)

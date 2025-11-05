@@ -10,9 +10,9 @@
     {% if user.is_authenticated %}
         <button type="submit" style="border:none; background:none; cursor:pointer; font-size:24px;">
             {% if user in recipe.favorited_by.all %}
-                ❤️  <!-- filled heart if already favorited -->
+                ❤️ <!-- filled heart if already favorited -->
             {% else %}
-                🤍  <!-- empty heart if not favorited -->
+                🤍 <!-- empty heart if not favorited -->
             {% endif %}
         </button>
     {% else %}
@@ -40,26 +40,38 @@
 <!-- Comments Section -->
 <h3>Comments</h3>
 
+<!-- Comment form FIRST -->
+{% if user.is_authenticated %}
+  <form method="post" class="comment-form" style="margin-bottom:20px;">
+    {% csrf_token %}
+    <textarea name="text" rows="3" placeholder="Add your comment..." required style="width:100%;"></textarea><br>
+    <button type="submit">Post Comment</button>
+  </form>
+{% else %}
+  <p><a href="{% url 'login' %}">Log in</a> to post a comment.</p>
+{% endif %}
+
+<hr>
+
+<!-- Existing comments -->
 <div class="comments-section">
   {% for comment in comments %}
-    <div class="comment">
+    <div class="comment" style="margin-bottom: 15px; padding: 10px; border-bottom: 1px solid #ddd;">
       <strong>{{ comment.user.username }}</strong>
       <p>{{ comment.text }}</p>
       <small>{{ comment.created_on|date:"jS F Y, g:i a" }}</small>
+
+      {% if user == comment.user or user.is_staff or user.is_superuser %}
+        <div class="comment-actions" style="margin-top: 5px;">
+          <a href="{% url 'edit_comment' comment.id %}" style="color: blue; text-decoration: none;">✏️ Edit</a> |
+          <a href="{% url 'delete_comment' comment.id %}" style="color: red; text-decoration: none;"
+             onclick="return confirm('Are you sure you want to delete this comment?');">🗑️ Delete</a>
+        </div>
+      {% endif %}
     </div>
   {% empty %}
     <p>No comments yet. Be the first to comment!</p>
   {% endfor %}
 </div>
-
-{% if user.is_authenticated %}
-<form method="post" class="comment-form">
-  {% csrf_token %}
-  <textarea name="text" rows="3" placeholder="Add your comment..." required></textarea><br>
-  <button type="submit">Post Comment</button>
-</form>
-{% else %}
-<p><a href="{% url 'login' %}">Log in</a> to post a comment.</p>
-{% endif %}
 
 {% endblock %}

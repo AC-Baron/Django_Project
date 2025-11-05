@@ -33,6 +33,9 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('account/', views.account, name='account'),
     path('admin/', admin.site.urls),
+
+    path('comment/<int:comment_id>/edit/', views.edit_comment, name='edit_comment'),
+    path('comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
 ]
 
 if settings.DEBUG:

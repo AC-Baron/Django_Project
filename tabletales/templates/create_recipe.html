@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<h1>Create a New Recipe</h1>
+
+<form method="post" enctype="multipart/form-data" id="recipe-form">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Recipe Info</legend>
+    {{ form.as_p }}
+  </fieldset>
+
+  <fieldset id="ingredient-section">
+    <legend>Ingredients</legend>
+
+    {{ formset.management_form }}
+
+    <div id="ingredient-forms">
+      {% for form in formset %}
+        <div class="ingredient-form">
+          {{ form.name.label_tag }} {{ form.name }}
+          {{ form.quantity.label_tag }} {{ form.quantity }}
+          <button type="button" class="remove-ingredient">Remove</button>
+        </div>
+      {% endfor %}
+    </div>
+
+    <button type="button" id="add-ingredient">+ Add Ingredient</button>
+  </fieldset>
+
+  <button type="submit" class="submit-btn">Save Recipe</button>
+</form>
+
+<!-- External JS -->
+<script src="{% static 'js/create_recipe.js' %}"></script>
+
+<!-- External CSS -->
+<link rel="stylesheet" href="{% static 'css/create_recipe.css' %}">
+{% endblock %}

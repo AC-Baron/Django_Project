@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<h1>Edit Recipe: {{ recipe.title }}</h1>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Recipe Info</legend>
+    {{ form.as_p }}
+  </fieldset>
+
+  <fieldset id="ingredient-section">
+    <legend>Ingredients</legend>
+    {{ formset.management_form }}
+    {% for form in formset %}
+      <div class="ingredient-form">
+        {{ form.name.label_tag }} {{ form.name }}
+        {{ form.quantity.label_tag }} {{ form.quantity }}
+        {% if form.instance.pk %}
+          <button type="button" class="remove-ingredient">Remove</button>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </fieldset>
+
+  <button type="submit" class="submit-btn">Save Changes</button>
+</form>
+
+<link rel="stylesheet" href="{% static 'css/create_recipe.css' %}">
+<script src="{% static 'js/create_recipe.js' %}"></script>
+{% endblock %}

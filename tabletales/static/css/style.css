@@ -102,3 +102,11 @@ body {
   color: #777;
   margin-bottom: 15px;
 }
+
+/* Author name below card */
+.recipe-author {
+  font-size: 0.9em;
+  color: #555;
+  text-align: center;
+  margin: 0;
+}

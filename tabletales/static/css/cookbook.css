@@ -53,73 +53,82 @@
 }
 
 
+.recipe-card {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    width: 340px;
+    height: 90px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
 .recipe-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* --- Recipe Thumbnail --- */
-.recipe-thumb {
-  width: 100%;
-  height: 150px;
-  border-radius: 8px;
-  object-fit: cover;
-  border: 1px solid #ccc;
-}
-
-/* --- Recipe Info --- */
-.recipe-info h3 {
-  margin: 10px 0;
-  font-size: 1.05em;
-}
-
-.recipe-info a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 600;
-}
-
-.recipe-info a:hover {
-  color: #007bff;
-}
-
-/* === Recipe card layout === */
-.recipe-card {
+.recipe-image-container {
+  flex: 0 0 35%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  padding: 12px 16px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  height: 80px;
+  justify-content: center;
+  background-color: #f8f9fa;
+  overflow: hidden;
 }
 
-/* === Image === */
 .recipe-image {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 10px;
-  margin-right: 15px;
+}
+
+.recipe-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 10px;
 }
 
 .edit-link {
+  flex: 0 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #007bff;
   color: white;
-  padding: 8px 14px;
-  border-radius: 8px;
   text-decoration: none;
   font-weight: bold;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
   transition: background-color 0.2s ease;
-  position: absolute;
-  bottom: 15px;         /* Always at bottom */
-  left: 50%;            /* Center horizontally */
-  transform: translateX(-50%);
 }
 
 .edit-link:hover {
   background-color: #0056b3;
+}
+
+.search-container {
+  text-align: center;
+  margin: 20px 0 30px;
+}
+
+.search-input {
+  width: 60%;
+  padding: 10px 14px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: #007bff;
 }

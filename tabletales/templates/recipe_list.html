@@ -4,9 +4,24 @@
 
 <h1 class="page-title">Recipes</h1>
 
-<div class="recipe-grid">
+<!-- 🔍 Search Bar -->
+<div class="search-container">
+  <input 
+    type="text" 
+    id="whatscooking-search" 
+    placeholder="Search recipes or ingredients..." 
+    class="search-input"
+  >
+</div>
+
+<!-- Recipe Grid -->
+<div id="whatscooking-grid" class="recipe-grid">
   {% for recipe in recipes %}
-    <div class="recipe-card">
+    <div 
+      class="recipe-card" 
+      data-title="{{ recipe.title|lower }}" 
+      data-ingredients="{% for ing in recipe.ingredients.all %}{{ ing.name|lower }} {% endfor %}"
+    >
       <a href="{% url 'recipe_detail' recipe.pk %}">
         {% if recipe.image %}
           <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
@@ -21,5 +36,9 @@
     <p>No recipes yet!</p>
   {% endfor %}
 </div>
+
+<!-- Static Files -->
+<link rel="stylesheet" href="{% static 'css/recipe_list.css' %}">
+<script src="{% static 'js/whatscooking_search.js' %}"></script>
 
 {% endblock %}

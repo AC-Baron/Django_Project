@@ -8,25 +8,46 @@
   <a href="{% url 'create_recipe' %}" class="create-recipe-btn">+ Create New Recipe</a>
 </div>
 
+<!-- 🔍 Global Search Bar -->
+<div class="search-container">
+  <input 
+    type="text" 
+    id="cookbook-search" 
+    placeholder="Search all my recipes and favourites..." 
+    class="search-input"
+  >
+</div>
+
 <!-- My Recipes Section -->
 <div class="collapsible">
   <button class="collapse-btn" type="button" data-target="#my-recipes">My Recipes ▼</button>
   <div id="my-recipes" class="collapsible-content">
     {% if my_recipes %}
-      <div class="recipe-card-grid">
+      <div id="my-recipes-grid" class="recipe-card-grid">
         {% for recipe in my_recipes %}
-          <div class="recipe-card">
-            <a href="{% url 'recipe_detail' recipe.pk %}">
+          <div 
+            class="recipe-card" 
+            data-title="{{ recipe.title|lower }}"
+            data-ingredients="{% for ing in recipe.ingredients.all %}{{ ing.name|lower }} {% endfor %}"
+          >
+            <!-- Left: Image -->
+            <div class="recipe-image-container">
               {% if recipe.image %}
-                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-thumb">
+                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
               {% else %}
-                <img src="{% static 'images/default_recipe.png' %}" alt="Default image" class="recipe-thumb">
+                <img src="{% static 'images/default_recipe.png' %}" alt="Default image" class="recipe-image">
               {% endif %}
-            </a>
-            <div class="recipe-info">
-              <h3><a href="{% url 'recipe_detail' recipe.pk %}">{{ recipe.title }}</a></h3>
-              <a href="{% url 'edit_recipe' recipe.pk %}" class="edit-link">✏️ Edit Recipe</a>
             </div>
+
+            <!-- Middle: Title -->
+            <div class="recipe-info">
+              <h3 class="recipe-title">
+                <a href="{% url 'recipe_detail' recipe.pk %}">{{ recipe.title }}</a>
+              </h3>
+            </div>
+
+            <!-- Right: Edit Button -->
+            <a href="{% url 'edit_recipe' recipe.pk %}" class="edit-link">✏️</a>
           </div>
         {% endfor %}
       </div>
@@ -41,20 +62,33 @@
   <button class="collapse-btn" type="button" data-target="#favorite-recipes">My Favourites ▼</button>
   <div id="favorite-recipes" class="collapsible-content">
     {% if favorite_recipes %}
-      <div class="recipe-card-grid">
+      <div id="favourite-recipes-grid" class="recipe-card-grid">
         {% for recipe in favorite_recipes %}
-          <div class="recipe-card">
-            <a href="{% url 'recipe_detail' recipe.pk %}">
-              {% if recipe.image %}
-                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-thumb">
-              {% else %}
-                <img src="{% static 'images/default_recipe.png' %}" alt="Default image" class="recipe-thumb">
-              {% endif %}
-            </a>
-            <div class="recipe-info">
-              <h3><a href="{% url 'recipe_detail' recipe.pk %}">{{ recipe.title }}</a></h3>
-              <p>By {{ recipe.author.username }}</p>
+          <div class="recipe-card-wrapper">
+            <div 
+              class="recipe-card" 
+              data-title="{{ recipe.title|lower }}"
+              data-ingredients="{% for ing in recipe.ingredients.all %}{{ ing.name|lower }} {% endfor %}"
+            >
+              <!-- Left: Image -->
+              <div class="recipe-image-container">
+                {% if recipe.image %}
+                  <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
+                {% else %}
+                  <img src="{% static 'images/default_recipe.png' %}" alt="Default image" class="recipe-image">
+                {% endif %}
+              </div>
+
+              <!-- Middle: Title -->
+              <div class="recipe-info">
+                <h3 class="recipe-title">
+                  <a href="{% url 'recipe_detail' recipe.pk %}">{{ recipe.title }}</a>
+                </h3>
+              </div>
             </div>
+
+            <!-- Author BELOW the card -->
+            <p class="recipe-author">By {{ recipe.author.username }}</p>
           </div>
         {% endfor %}
       </div>

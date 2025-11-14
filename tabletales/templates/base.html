@@ -10,6 +10,11 @@
 
 <body>
     <nav class="navbar">
+        <div class="nav-left">
+            <a href="/" class="logo-link">
+                <img src="{% static 'images/logo.png' %}" alt="TableTales Logo" class="nav-logo">
+            </a>
+        </div>
         <div class="logo">TableTales</div>
         <ul class="nav-links">
             <li><a href="{% url 'recipe_list' %}">What's Cooking?</a></li>

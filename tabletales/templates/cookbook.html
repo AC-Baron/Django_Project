@@ -13,24 +13,81 @@
   <input 
     type="text" 
     id="cookbook-search" 
-    placeholder="Search all my recipes and favourites..." 
+    placeholder="Search Recipes/Favourites..." 
     class="search-input"
   >
 </div>
 
-<!-- My Recipes Section -->
+<!-- ============================
+    MY RECIPES
+============================= -->
 <div class="collapsible">
   <button class="collapse-btn" type="button" data-target="#my-recipes">My Recipes ▼</button>
+
   <div id="my-recipes" class="collapsible-content">
     {% if my_recipes %}
       <div id="my-recipes-grid" class="recipe-card-grid">
+
         {% for recipe in my_recipes %}
+        <div 
+          class="recipe-card" 
+          data-title="{{ recipe.title|lower }}"
+          data-ingredients="{% for ing in recipe.ingredients.all %}{{ ing.name|lower }} {% endfor %}"
+        >
+
+          <!-- Image -->
+          <div class="recipe-image-container">
+            {% if recipe.image %}
+              <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
+            {% else %}
+              <img src="{% static 'images/default_recipe.png' %}" alt="Default image" class="recipe-image">
+            {% endif %}
+          </div>
+
+          <!-- Title -->
+          <div class="recipe-info">
+            <h3 class="recipe-title">
+              <a href="{% url 'recipe_detail' recipe.pk %}">{{ recipe.title }}</a>
+            </h3>
+          </div>
+
+          <!-- EDIT BUTTON (owner OR admin) -->
+          {% if request.user == recipe.author or request.user.is_staff or request.user.is_superuser %}
+            <a href="{% url 'edit_recipe' recipe.pk %}" class="edit-link">✏️</a>
+          {% endif %}
+
+        </div>
+        {% endfor %}
+
+      </div>
+
+    {% else %}
+      <p>You haven’t created any recipes yet.</p>
+    {% endif %}
+  </div>
+</div>
+
+
+<!-- ============================
+    FAVOURITES
+============================= -->
+<div class="collapsible">
+  <button class="collapse-btn" type="button" data-target="#favorite-recipes">My Favourites ▼</button>
+
+  <div id="favorite-recipes" class="collapsible-content">
+    {% if favorite_recipes %}
+      <div id="favourite-recipes-grid" class="recipe-card-grid">
+
+        {% for recipe in favorite_recipes %}
+        <div class="recipe-card-wrapper">
+          
           <div 
             class="recipe-card" 
             data-title="{{ recipe.title|lower }}"
             data-ingredients="{% for ing in recipe.ingredients.all %}{{ ing.name|lower }} {% endfor %}"
           >
-            <!-- Left: Image -->
+
+            <!-- Image -->
             <div class="recipe-image-container">
               {% if recipe.image %}
                 <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
@@ -39,67 +96,36 @@
               {% endif %}
             </div>
 
-            <!-- Middle: Title -->
+            <!-- Title -->
             <div class="recipe-info">
               <h3 class="recipe-title">
                 <a href="{% url 'recipe_detail' recipe.pk %}">{{ recipe.title }}</a>
               </h3>
             </div>
 
-            <!-- Right: Edit Button -->
-            <a href="{% url 'edit_recipe' recipe.pk %}" class="edit-link">✏️</a>
+            <!-- EDIT BUTTON — ADMINS ONLY -->
+            {% if request.user.is_staff or request.user.is_superuser %}
+              <a href="{% url 'edit_recipe' recipe.pk %}" class="edit-link">✏️</a>
+            {% endif %}
+
           </div>
+
+          <!-- Author below card -->
+          <p class="recipe-author">By {{ recipe.author.username }}</p>
+
+        </div>
         {% endfor %}
+
       </div>
-    {% else %}
-      <p>You haven’t created any recipes yet.</p>
-    {% endif %}
-  </div>
-</div>
 
-<!-- Favorite Recipes Section -->
-<div class="collapsible">
-  <button class="collapse-btn" type="button" data-target="#favorite-recipes">My Favourites ▼</button>
-  <div id="favorite-recipes" class="collapsible-content">
-    {% if favorite_recipes %}
-      <div id="favourite-recipes-grid" class="recipe-card-grid">
-        {% for recipe in favorite_recipes %}
-          <div class="recipe-card-wrapper">
-            <div 
-              class="recipe-card" 
-              data-title="{{ recipe.title|lower }}"
-              data-ingredients="{% for ing in recipe.ingredients.all %}{{ ing.name|lower }} {% endfor %}"
-            >
-              <!-- Left: Image -->
-              <div class="recipe-image-container">
-                {% if recipe.image %}
-                  <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
-                {% else %}
-                  <img src="{% static 'images/default_recipe.png' %}" alt="Default image" class="recipe-image">
-                {% endif %}
-              </div>
-
-              <!-- Middle: Title -->
-              <div class="recipe-info">
-                <h3 class="recipe-title">
-                  <a href="{% url 'recipe_detail' recipe.pk %}">{{ recipe.title }}</a>
-                </h3>
-              </div>
-            </div>
-
-            <!-- Author BELOW the card -->
-            <p class="recipe-author">By {{ recipe.author.username }}</p>
-          </div>
-        {% endfor %}
-      </div>
     {% else %}
       <p>You haven’t favorited any recipes yet.</p>
     {% endif %}
   </div>
 </div>
 
-<!-- External Files -->
 <link rel="stylesheet" href="{% static 'css/cookbook.css' %}">
 <script src="{% static 'js/cookbook.js' %}"></script>
 
 {% endblock %}
+

@@ -146,7 +146,11 @@ def create_recipe(request):
 # Edit recipe view
 @login_required
 def edit_recipe(request, pk):
-    recipe = get_object_or_404(Recipe, pk=pk, author=request.user)
+    # Allow owner OR admin to edit the recipe
+    if request.user.is_staff or request.user.is_superuser:
+        recipe = get_object_or_404(Recipe, pk=pk)
+    else:
+        recipe = get_object_or_404(Recipe, pk=pk, author=request.user)
 
     IngredientFormSet = inlineformset_factory(
         Recipe,
@@ -165,6 +169,7 @@ def edit_recipe(request, pk):
             formset.save()
             messages.success(request, "Recipe updated successfully!")
             return redirect('recipe_detail', pk=recipe.pk)
+
     else:
         form = RecipeForm(instance=recipe)
         formset = IngredientFormSet(instance=recipe, prefix='ingredients')
@@ -174,3 +179,14 @@ def edit_recipe(request, pk):
         'formset': formset,
         'recipe': recipe
     })
+
+#delete recipe view
+@login_required
+def delete_recipe(request, pk):
+    recipe = get_object_or_404(Recipe, pk=pk, author=request.user)
+
+    if request.method == "POST":
+        recipe.delete()
+        return redirect('cookbook')  # redirect wherever you want after deletion
+
+    return render(request, "delete_recipe_confirm.html", {"recipe": recipe})

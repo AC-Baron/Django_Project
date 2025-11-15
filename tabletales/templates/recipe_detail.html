@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-<a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="back-btn">← Back</a>
+<div class="detail-buttons">
+    <a href="{{ back_url }}" class="btn back-btn">⬅ Back</a>
+
+    {% if user == recipe.author or user.is_staff or user.is_superuser %}
+        <a href="{% url 'edit_recipe' recipe.pk %}" class="btn edit-btn">✏️ Edit</a>
+    {% endif %}
+</div>
+
+
 
 <h1>{{ recipe.title }}</h1>
 <p><em>by {{ recipe.author.username }}</em></p>

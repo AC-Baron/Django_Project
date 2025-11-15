@@ -136,3 +136,61 @@ body {
 .back-btn:hover {
     background: #ddd;
 }
+
+.edit-btn {
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 8px 14px;
+    background: #eee;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: background 0.2s ease-in-out;
+}
+
+/* Hamburger icon hidden on desktop */
+.hamburger {
+  font-size: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: none;
+}
+
+/* ------------------------ */
+/* Mobile / Tablet Screens  */
+/* ------------------------ */
+
+@media (max-width: 768px) {
+
+  /* Show hamburger */
+  .hamburger {
+    display: block;
+  }
+
+  /* Hide normal nav */
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background: white;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 180px;
+    border-left: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+  }
+
+  /* Show menu when active */
+  .nav-links.active {
+    display: flex;
+  }
+
+  /* Center text on mobile */
+  .nav-links li {
+    text-align: center;
+    padding: 10px 0;
+  }
+}

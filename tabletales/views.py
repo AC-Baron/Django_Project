@@ -24,12 +24,21 @@ def recipe_list(request):
     return render(request, 'recipe_list.html', {'recipes': recipes})
 
 
-# Recipe detail view
 def recipe_detail(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
     comments = recipe.comments.all().order_by('-created_on')
 
-    # Handle comment submission
+    # --- NEW BACK BUTTON LOGIC USING SESSION ---
+    referer = request.META.get("HTTP_REFERER", "")
+
+    # Only store the back_url when coming directly from cookbook or recipe_list
+    if ("recipe_list" in referer) or ("cookbook" in referer):
+        request.session["back_url"] = referer
+
+    # Use the stored back_url OR default to recipe_list
+    back_url = request.session.get("back_url", "/")
+
+    # --- COMMENT SUBMISSION ---
     if request.method == "POST":
         if request.user.is_authenticated:
             text = request.POST.get("text")
@@ -42,6 +51,7 @@ def recipe_detail(request, pk):
     return render(request, 'recipe_detail.html', {
         'recipe': recipe,
         'comments': comments,
+        'back_url': back_url,
     })
 
 
@@ -183,10 +193,14 @@ def edit_recipe(request, pk):
 #delete recipe view
 @login_required
 def delete_recipe(request, pk):
-    recipe = get_object_or_404(Recipe, pk=pk, author=request.user)
+    # Allow recipe owner OR admin to delete
+    if request.user.is_staff or request.user.is_superuser:
+        recipe = get_object_or_404(Recipe, pk=pk)
+    else:
+        recipe = get_object_or_404(Recipe, pk=pk, author=request.user)
 
     if request.method == "POST":
         recipe.delete()
-        return redirect('cookbook')  # redirect wherever you want after deletion
+        return redirect('cookbook')
 
     return render(request, "delete_recipe_confirm.html", {"recipe": recipe})

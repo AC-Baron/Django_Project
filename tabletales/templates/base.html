@@ -15,8 +15,12 @@
                 <img src="{% static 'images/logo.png' %}" alt="TableTales Logo" class="nav-logo">
             </a>
         </div>
+        <!-- Hamburger Icon -->
+        <button class="hamburger" id="hamburger">☰</button>
+
         <div class="logo">TableTales</div>
-        <ul class="nav-links">
+        <ul id="nav-links" class="nav-links">
+
             <li><a href="{% url 'recipe_list' %}">What's Cooking?</a></li>
             <li><a href="{% url 'cookbook' %}">Cookbook</a></li>
             {% if user.is_authenticated %}
@@ -35,4 +39,14 @@
     {% block content %}
     {% endblock %}
 </body>
+
+<script>
+  const hamburger = document.getElementById("hamburger");
+  const navLinks = document.getElementById("nav-links");
+
+  hamburger.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+  });
+</script>
+
 </html>

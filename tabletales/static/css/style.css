@@ -2,7 +2,7 @@
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
-  background-color: #F5F5DC;
+  background-color: #8e91a8;
   color: #333;
 }
 
@@ -156,6 +156,7 @@ body {
   border: none;
   cursor: pointer;
   display: none;
+  margin-left: 0;
 }
 
 /* ------------------------ */
@@ -177,20 +178,48 @@ body {
     position: absolute;
     top: 60px;
     right: 0;
-    width: 180px;
+    width: 100%;
     border-left: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     padding: 10px 0;
+    background-color: #222;
+    text-align: center;
   }
 
   /* Show menu when active */
   .nav-links.active {
     display: flex;
+    max-height: 400px;
+    padding: 15px 0;
   }
 
   /* Center text on mobile */
   .nav-links li {
     text-align: center;
-    padding: 10px 0;
+    color: #ccc;
+    border-bottom: 1px solid #ccc;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-links li a {
+    display: flex;
+    text-decoration: none;
+    color: #ccc;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.4;
+    padding: 0px 0;
+  }
+
+  .nav-links li:last-child {
+    border-bottom: none;
+  }
+
+  .logout-btn {
+  display: block;
+  margin: 10px auto;      /* centers the logout button */
+  text-align: center;
   }
 }

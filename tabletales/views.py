@@ -2,14 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Recipe, Comment
-from django.conf import settings
-from .forms import RecipeForm
-from .forms import RecipeForm, IngredientFormSet
+from django.urls import reverse
+from .models import Recipe, Comment, Ingredient
+from .forms import RecipeForm, IngredientForm, IngredientFormSet
 from django.forms import inlineformset_factory
-from .models import Recipe, Ingredient
-from .forms import RecipeForm, IngredientForm
-
 
 
 # Homepage view
@@ -21,38 +17,37 @@ def index(request):
 # Recipe list view
 def recipe_list(request):
     recipes = Recipe.objects.all()
+
+    # Store the navigation origin
+    request.session["back_url"] = request.path
+
     return render(request, 'recipe_list.html', {'recipes': recipes})
+
 
 
 def recipe_detail(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
     comments = recipe.comments.all().order_by('-created_on')
 
-    # --- NEW BACK BUTTON LOGIC USING SESSION ---
-    referer = request.META.get("HTTP_REFERER", "")
+    # Get stored back URL (from recipe_list or cookbook)
+    back_url = request.session.get("back_url", reverse("recipe_list"))
 
-    # Only store the back_url when coming directly from cookbook or recipe_list
-    if ("recipe_list" in referer) or ("cookbook" in referer):
-        request.session["back_url"] = referer
-
-    # Use the stored back_url OR default to recipe_list
-    back_url = request.session.get("back_url", "/")
-
-    # --- COMMENT SUBMISSION ---
+    # Handle comment submission
     if request.method == "POST":
         if request.user.is_authenticated:
             text = request.POST.get("text")
             if text.strip():
                 Comment.objects.create(recipe=recipe, user=request.user, text=text)
-                return redirect('recipe_detail', pk=pk)
+            return redirect('recipe_detail', pk=pk)
         else:
             return redirect('login')
 
-    return render(request, 'recipe_detail.html', {
-        'recipe': recipe,
-        'comments': comments,
-        'back_url': back_url,
+    return render(request, "recipe_detail.html", {
+        "recipe": recipe,
+        "comments": comments,
+        "back_url": back_url,
     })
+
 
 
 # Toggle Favorite
@@ -69,21 +64,21 @@ def toggle_favorite(request, pk):
     return redirect('recipe_detail', pk=pk)
 
 
-# ✅ Updated Cookbook View
-@login_required
+# Cookbook View
 def cookbook(request):
     user = request.user
 
-    # Recipes created by the current user
     my_recipes = Recipe.objects.filter(author=user)
-
-    # Recipes the user has favorited
     favorite_recipes = user.favorite_recipes.all()
+
+    # Store back URL so detail pages work correctly
+    request.session["back_url"] = request.path
 
     return render(request, 'cookbook.html', {
         'my_recipes': my_recipes,
         'favorite_recipes': favorite_recipes,
     })
+
 
 
 # Account page
@@ -126,7 +121,8 @@ def delete_comment(request, comment_id):
     messages.success(request, "Comment deleted successfully!")
     return redirect('recipe_detail', pk=recipe_id)
 
-# Create recipe view
+
+# Create recipe
 @login_required
 def create_recipe(request):
 
@@ -142,8 +138,10 @@ def create_recipe(request):
             formset.save()
             messages.success(request, "Recipe created successfully!")
             return redirect('recipe_detail', pk=recipe.pk)
+
         else:
             messages.error(request, "Please correct the errors below.")
+
     else:
         form = RecipeForm()
         formset = IngredientFormSet(prefix='ingredients')
@@ -153,18 +151,24 @@ def create_recipe(request):
         'formset': formset
     })
 
-# Edit recipe view
+
+# ⭐ Edit recipe with “from URL” logic ⭐
 @login_required
 def edit_recipe(request, pk):
-    # Allow owner OR admin to edit the recipe
+
+    # Save where the user came FROM before editing
+    from_url = request.GET.get("from")
+    if from_url:
+        request.session["back_url"] = from_url
+
+    # Allow owner OR admin
     if request.user.is_staff or request.user.is_superuser:
         recipe = get_object_or_404(Recipe, pk=pk)
     else:
         recipe = get_object_or_404(Recipe, pk=pk, author=request.user)
 
     IngredientFormSet = inlineformset_factory(
-        Recipe,
-        Ingredient,
+        Recipe, Ingredient,
         form=IngredientForm,
         extra=0,
         can_delete=True
@@ -190,14 +194,11 @@ def edit_recipe(request, pk):
         'recipe': recipe
     })
 
-#delete recipe view
+
+# Delete recipe
 @login_required
 def delete_recipe(request, pk):
-    # Allow recipe owner OR admin to delete
-    if request.user.is_staff or request.user.is_superuser:
-        recipe = get_object_or_404(Recipe, pk=pk)
-    else:
-        recipe = get_object_or_404(Recipe, pk=pk, author=request.user)
+    recipe = get_object_or_404(Recipe, pk=pk, author=request.user)
 
     if request.method == "POST":
         recipe.delete()

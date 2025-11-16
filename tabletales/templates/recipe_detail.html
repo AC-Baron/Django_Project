@@ -5,7 +5,7 @@
     <a href="{{ back_url }}" class="btn back-btn">⬅ Back</a>
 
     {% if user == recipe.author or user.is_staff or user.is_superuser %}
-        <a href="{% url 'edit_recipe' recipe.pk %}" class="btn edit-btn">✏️ Edit</a>
+        <a href="{% url 'edit_recipe' recipe.pk %}?from={{ back_url }}" class="btn edit-btn">✏️ Edit</a>
     {% endif %}
 </div>
 

@@ -68,8 +68,15 @@ def toggle_favorite(request, pk):
 def cookbook(request):
     user = request.user
 
-    my_recipes = Recipe.objects.filter(author=user)
-    favorite_recipes = user.favorite_recipes.all()
+    if user.is_authenticated:
+        # Normal behaviour for logged-in users
+        my_recipes = Recipe.objects.filter(author=user)
+        favorite_recipes = user.favorite_recipes.all()
+    else:
+        # Prevent errors when user is not logged in
+        my_recipes = []
+        favorite_recipes = []
+        messages.info(request, "You must be logged in to use this feature.")
 
     # Store back URL so detail pages work correctly
     request.session["back_url"] = request.path
@@ -78,7 +85,6 @@ def cookbook(request):
         'my_recipes': my_recipes,
         'favorite_recipes': favorite_recipes,
     })
-
 
 
 # Account page

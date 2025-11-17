@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Edit Recipe: {{ recipe.title }}</h1>
 
-<a href="{% url 'delete_recipe' recipe.pk %}" class="delete-btn">
+<a href="{% url 'delete_recipe' recipe.pk %}?from={{ back_url }}" class="delete-btn">
   🗑️ Delete Recipe
 </a>
 

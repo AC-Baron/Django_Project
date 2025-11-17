@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+
+<div class="create-recipe-container">
+
 <h1>Create a New Recipe</h1>
 
 <form method="post" enctype="multipart/form-data" id="recipe-form">
@@ -30,6 +33,8 @@
 
   <button type="submit" class="submit-btn">Save Recipe</button>
 </form>
+
+</div>
 
 <!-- External JS -->
 <script src="{% static 'js/create_recipe.js' %}"></script>

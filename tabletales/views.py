@@ -6,7 +6,21 @@ from django.urls import reverse
 from .models import Recipe, Comment, Ingredient
 from .forms import RecipeForm, IngredientForm, IngredientFormSet
 from django.forms import inlineformset_factory
+from django.contrib.auth import login
+from .forms import SignUpForm
 
+#Signup view
+def signup_view(request):
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = SignUpForm()
+
+    return render(request, "signup.html", {'form': form})
 
 # Homepage view
 def index(request):
@@ -158,7 +172,7 @@ def create_recipe(request):
     })
 
 
-# ⭐ Edit recipe with “from URL” logic ⭐
+# Edit Recipe View
 @login_required
 def edit_recipe(request, pk):
 
@@ -204,10 +218,20 @@ def edit_recipe(request, pk):
 # Delete recipe
 @login_required
 def delete_recipe(request, pk):
-    recipe = get_object_or_404(Recipe, pk=pk, author=request.user)
+    recipe = get_object_or_404(Recipe, pk=pk)
+
+    # Permission check: owner OR admin OR superuser
+    if not (request.user == recipe.author or request.user.is_staff or request.user.is_superuser):
+        raise Http404("You do not have permission to delete this recipe.")
+
+    # Determine where to go AFTER deleting
+    back_url = request.GET.get("from") or request.session.get("back_url") or reverse('cookbook')
 
     if request.method == "POST":
         recipe.delete()
-        return redirect('cookbook')
+        return redirect(back_url)
 
-    return render(request, "delete_recipe_confirm.html", {"recipe": recipe})
+    return render(request, "delete_recipe_confirm.html", {
+        "recipe": recipe,
+        "back_url": back_url,
+    })

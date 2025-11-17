@@ -1,10 +1,19 @@
 from django import forms
 from .models import Recipe, Ingredient
-
-from django import forms
 from django.forms import inlineformset_factory
 from .models import Recipe, Ingredient
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
+#Account Signup Form
+class SignUpForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+
+# Recipe form
 class RecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe

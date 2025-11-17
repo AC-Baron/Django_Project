@@ -136,12 +136,17 @@
     overflow: visible;
 }
 
+.recipe-card-wrapper:hover {
+  transform: translateY(-6px);
+  border-radius: 0 0 12px 12px;
+}
+
 .recipe-author-badge {
-    width: 100%;
-    position: absolute;
+    width: 302px;
+    position: relative;
     left: 0;
-    bottom: -0px;
-    height: 40px;
+    top: -9px;
+    height: 30px;
 
     background: #007bff;
     color: white;
@@ -152,9 +157,4 @@
 
     border-radius: 0 0 12px 12px; /* matches card bottom */
     box-sizing: border-box;
-}
-
-.recipe-card-wrapper:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }

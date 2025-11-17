@@ -64,14 +64,11 @@ body {
 /* === Recipe Grid === */
 .recipe-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 4fr));
   gap: 30px;
   padding: 40px 60px;
   justify-items: center;
 }
-
-
-
 
 
 /* === Recipe Image === */

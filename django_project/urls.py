@@ -43,6 +43,8 @@ urlpatterns = [
 
     path("signup/", views.signup_view, name="signup"),
 
+    path('notifications/', views.notifications_page, name='notifications'),
+
 ]
 
 if settings.DEBUG:

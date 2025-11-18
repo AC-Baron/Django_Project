@@ -17,22 +17,68 @@
         </div>
         
         <div class="logo">TableTales</div>
-        <!-- Hamburger Icon -->
+
+        <!-- Hamburger -->
         <button class="hamburger" id="hamburger">☰</button>
         
         <ul id="nav-links" class="nav-links">
+
             <li><a href="{% url 'recipe_list' %}">What's Cooking?</a></li>
             <li><a href="{% url 'cookbook' %}">Cookbook</a></li>
+
             {% if user.is_authenticated %}
+
+                <!-- Account link -->
                 <li><a href="{% url 'account' %}">Account ({{ user.username }})</a></li>
-                <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="logout-btn">Logout</button>
-                </form>
+
+                <!-- 🔔 Notification Bell (always next to Logout) -->
+                <li class="notification-wrapper">
+                    <a href="{% url 'notifications' %}" class="notification-bell" style="font-size:24px; text-decoration:none;">
+                        🔔
+                    </a>
+
+                    {% if unread_count > 0 %}
+                        <span class="notification-count">{{ unread_count }}</span>
+                    {% endif %}
+
+                    <div class="notification-dropdown">
+                        {% if unread_notifications %}
+                            {% for note in unread_notifications %}
+                                <a href="{{ note.link }}" class="notification-item">
+                                    {{ note.message }}
+                                </a>
+                            {% endfor %}
+                        {% else %}
+                            <p class="no-notifications">No new notifications</p>
+                        {% endif %}
+                        <a href="{% url 'notifications' %}" class="view-all">View all</a>
+                    </div>
+                </li>
+
+                <!-- Logout button -->
+                <li>
+                    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                </li>
 
             {% else %}
+
+                <!-- 🔔 Bell still appears for consistency, but without dropdown or count -->
+                <li class="notification-wrapper">
+                    <a href="{% url 'login' %}" class="notification-bell" style="font-size:24px; text-decoration:none;">
+                        🔔
+                    </a>
+                </li>
+
+                <!-- Login link -->
                 <li><a href="{% url 'login' %}">Login</a></li>
+
             {% endif %}
+
+
+
         </ul>
     </nav>
 

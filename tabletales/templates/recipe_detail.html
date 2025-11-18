@@ -68,20 +68,34 @@
   {% for comment in comments %}
     <div class="comment" style="margin-bottom: 15px; padding: 10px; border-bottom: 1px solid #ddd;">
       <strong>{{ comment.user.username }}</strong>
-      <p>{{ comment.text }}</p>
-      <small>{{ comment.created_on|date:"jS F Y, g:i a" }}</small>
 
-      {% if user == comment.user or user.is_staff or user.is_superuser %}
-        <div class="comment-actions" style="margin-top: 5px;">
-          <a href="{% url 'edit_comment' comment.id %}" style="color: blue; text-decoration: none;">✏️ Edit</a> |
-          <a href="{% url 'delete_comment' comment.id %}" style="color: red; text-decoration: none;"
-             onclick="return confirm('Are you sure you want to delete this comment?');">🗑️ Delete</a>
-        </div>
+      {% if request.GET.edit_comment == comment.id|stringformat:"s" %}
+          <!-- Inline edit form -->
+          <form action="{% url 'edit_comment' comment.id %}" method="post">
+              {% csrf_token %}
+              <textarea name="text" rows="3" style="width:100%;">{{ comment.text }}</textarea>
+              <br>
+              <button type="submit">Save</button>
+              <a href="{% url 'recipe_detail' recipe.pk %}">Cancel</a>
+          </form>
+      {% else %}
+          <p>{{ comment.text }}</p>
+          <small>{{ comment.created_on|date:"jS F Y, g:i a" }}</small>
+
+          {% if user == comment.user or user.is_staff or user.is_superuser %}
+            <div class="comment-actions" style="margin-top: 5px;">
+              <a href="?edit_comment={{ comment.id }}" style="color: blue; text-decoration: none;">✏️ Edit</a> |
+              <a href="{% url 'delete_comment' comment.id %}" style="color: red; text-decoration: none;"
+                 onclick="return confirm('Are you sure you want to delete this comment?');">🗑️ Delete</a>
+            </div>
+          {% endif %}
       {% endif %}
+      
     </div>
   {% empty %}
     <p>No comments yet. Be the first to comment!</p>
   {% endfor %}
 </div>
+
 
 {% endblock %}

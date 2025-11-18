@@ -8,6 +8,9 @@ from .forms import RecipeForm, IngredientForm, IngredientFormSet
 from django.forms import inlineformset_factory
 from django.contrib.auth import login
 from .forms import SignUpForm
+from .models import Notification
+from .models import Comment, Notification
+
 
 #Signup view
 def signup_view(request):
@@ -51,7 +54,16 @@ def recipe_detail(request, pk):
         if request.user.is_authenticated:
             text = request.POST.get("text")
             if text.strip():
-                Comment.objects.create(recipe=recipe, user=request.user, text=text)
+                comment = Comment.objects.create(recipe=recipe, user=request.user, text=text)
+
+                # Notify recipe owner (but not if owner comments on their own recipe)
+                if recipe.author != request.user:
+                    Notification.objects.create(
+                        user=recipe.author,
+                        message=f"{request.user.username} commented on your recipe '{recipe.title}'.",
+                        link=reverse("recipe_detail", args=[recipe.pk])
+                    )
+
             return redirect('recipe_detail', pk=pk)
         else:
             return redirect('login')
@@ -74,6 +86,14 @@ def toggle_favorite(request, pk):
         recipe.favorited_by.remove(user)
     else:
         recipe.favorited_by.add(user)
+
+        # If someone else favorites your recipe → notify the author
+        if recipe.author != user:
+            Notification.objects.create(
+                user=recipe.author,
+                message=f"{user.username} favorited your recipe '{recipe.title}'.",
+                link=reverse("recipe_detail", args=[recipe.pk])
+            )
 
     return redirect('recipe_detail', pk=pk)
 
@@ -107,24 +127,26 @@ def account(request):
     return render(request, 'account.html')
 
 
-# Edit comment
+# Edit comment — inline on recipe page
 @login_required
 def edit_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
 
+    # Permission check (owner or admin)
     if not (request.user == comment.user or request.user.is_staff or request.user.is_superuser):
         messages.error(request, "You don't have permission to edit this comment.")
         return redirect('recipe_detail', pk=comment.recipe.pk)
 
     if request.method == "POST":
-        new_text = request.POST.get("text")
-        if new_text.strip():
+        new_text = request.POST.get("text", "").strip()
+        if new_text:
             comment.text = new_text
             comment.save()
             messages.success(request, "Comment updated successfully!")
-            return redirect('recipe_detail', pk=comment.recipe.pk)
+        return redirect('recipe_detail', pk=comment.recipe.pk)
 
-    return render(request, 'edit_comment.html', {'comment': comment})
+    # If GET, place recipe page into edit mode
+    return redirect(f"/recipe/{comment.recipe.pk}/?edit_comment={comment.id}")
 
 
 # Delete comment
@@ -201,6 +223,15 @@ def edit_recipe(request, pk):
         if form.is_valid() and formset.is_valid():
             form.save()
             formset.save()
+
+            # Notify recipe owner only if the editor is not the owner
+            if recipe.author != request.user:
+                Notification.objects.create(
+                    user=recipe.author,
+                    message=f"An admin updated your recipe '{recipe.title}'.",
+                    link=reverse("recipe_detail", args=[recipe.pk])
+                )
+
             messages.success(request, "Recipe updated successfully!")
             return redirect('recipe_detail', pk=recipe.pk)
 
@@ -228,10 +259,32 @@ def delete_recipe(request, pk):
     back_url = request.GET.get("from") or request.session.get("back_url") or reverse('cookbook')
 
     if request.method == "POST":
+
+        # Notify the owner
+        if recipe.author != request.user:
+            Notification.objects.create(
+                user=recipe.author,
+                message=f"An admin deleted your recipe '{recipe.title}'.",
+                link=""
+            )
         recipe.delete()
         return redirect(back_url)
 
     return render(request, "delete_recipe_confirm.html", {
         "recipe": recipe,
         "back_url": back_url,
+    })
+
+#notifications
+@login_required
+def notifications_page(request):
+    notifications = Notification.objects.filter(
+        user=request.user
+    ).order_by('-created_at')
+
+    # Mark all unread notifications as read
+    notifications.filter(read=False).update(read=True)
+
+    return render(request, 'notifications.html', {
+        'notifications': notifications
     })

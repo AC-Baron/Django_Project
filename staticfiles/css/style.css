@@ -114,7 +114,6 @@ body {
     text-decoration: none;
     color: #333;
     font-weight: bold;
-    transition: background 0.2s ease-in-out;
 }
 
 .back-btn:hover {
@@ -130,7 +129,6 @@ body {
     text-decoration: none;
     color: #333;
     font-weight: bold;
-    transition: background 0.2s ease-in-out;
 }
 
 /* Hamburger icon hidden on desktop */

@@ -3,13 +3,11 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .models import Recipe, Comment, Ingredient
+from .models import Recipe, Comment, Ingredient, Notification
 from .forms import RecipeForm, IngredientForm, IngredientFormSet
 from django.forms import inlineformset_factory
 from django.contrib.auth import login
 from .forms import SignUpForm
-from .models import Notification
-from .models import Comment, Notification
 
 
 #Signup view

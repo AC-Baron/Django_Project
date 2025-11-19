@@ -1,54 +1,285 @@
-
+/* === General Body === */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: #8e91a8;
+  color: #333;
 }
 
-/* Navbar */
-body {
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    background-color: #fdfdfd;
-}
-
+/* === Navbar === */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #222;
-    padding: 15px 40px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #222;
+  padding: 15px 40px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  height: 40px;
+  overflow: visible;
 }
 
 .logo {
-    color: #f8f8f8;
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: 1px;
+  color: #f8f8f8;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.nav-logo {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+    margin-top: 10px;
+    margin-left: -20px;
 }
 
 .nav-links {
-    list-style: none; /* removes bullet points */
-    display: flex; /* makes them horizontal */
-    gap: 30px; /* adds spacing between items */
-    margin: 0;
-    padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-links li a {
-    text-decoration: none;
-    color: #f8f8f8;
-    font-weight: 500;
-    font-size: 16px;
-    transition: color 0.3s ease;
+  text-decoration: none;
+  color: #f8f8f8;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.3s ease;
 }
 
 .nav-links li a:hover {
-    color: #ffb347; /* nice gold/orange hover */
+  color: #ffb347;
 }
 
-/* Optional — content spacing */
-.content {
-    padding: 30px;
+/* === Page Content === */
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  margin: 30px 0 10px;
+  color: #222;
+}
+
+/* === Recipe Grid === */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 4fr));
+  gap: 30px;
+  padding: 40px 60px;
+  justify-items: center;
+}
+
+
+/* === Recipe Image === */
+.recipe-image {
+  width: 100%;
+  height: 200px;       /* fixed height for consistent look */
+  object-fit: cover;   /* crops to fit neatly */
+  display: block;
+}
+
+/* === Recipe Text === */
+.recipe-title {
+  font-size: 1.3rem;
+  color: #333;
+  margin: 12px 0 5px;
+  text-decoration: none;
+}
+
+.recipe-title:hover {
+  color: #ff7043;
+}
+
+.recipe-author {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 15px;
+}
+
+/* Author name below card */
+.recipe-author {
+  font-size: 0.9em;
+  color: #555;
+  text-align: center;
+  margin: 0;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 8px 14px;
+    background: #eee;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: background 0.2s ease-in-out;
+}
+
+.back-btn:hover {
+    background: #ddd;
+}
+
+.edit-btn {
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 8px 14px;
+    background: #eee;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: background 0.2s ease-in-out;
+}
+
+/* Hamburger icon hidden on desktop */
+.hamburger {
+  font-size: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: none;
+  margin-left: 0;
+}
+
+/* ------------------------ */
+/* Mobile / Tablet Screens  */
+/* ------------------------ */
+
+@media (max-width: 768px) {
+
+  /* Show hamburger */
+  .hamburger {
+    display: block;
+  }
+
+  /* Hide normal nav */
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background: white;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 100%;
+    border-left: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    background-color: #222;
+    text-align: center;
+  }
+
+  /* Show menu when active */
+  .nav-links.active {
+    display: flex;
+    max-height: 400px;
+    padding: 15px 0;
+  }
+
+  /* Center text on mobile */
+  .nav-links li {
+    text-align: center;
+    color: #ccc;
+    border-bottom: 1px solid #ccc;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-links li a {
+    display: flex;
+    text-decoration: none;
+    color: #ccc;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.4;
+    padding: 0px 0;
+  }
+
+  .nav-links li:last-child {
+    border-bottom: none;
+  }
+
+  .logout-btn {
+  display: block;
+  margin: 10px auto;      /* centers the logout button */
+  text-align: center;
+  }
+}
+
+/* Notification bell wrapper */
+.notification-wrapper {
+    position: relative;
+}
+
+/* Bell icon */
+.notification-bell {
+    position: relative;
+    display: inline-block;
+    font-size: 20px;
+}
+
+/* Red unread counter */
+.notification-count {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+}
+
+/* Dropdown */
+.notification-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 28px;
+    width: 260px;
+    background: white;
+    color: #333;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+    z-index: 9999;
+}
+
+/* Show dropdown when hovering the bell */
+.notification-wrapper:hover .notification-dropdown {
+    display: block;
+}
+
+/* Dropdown items */
+.notification-item {
+    display: block;
+    padding: 6px 4px;
+    text-decoration: none;
+    color: #222;
+    border-bottom: 1px solid #eee;
+}
+
+.notification-item:hover {
+    background: #f5f5f5;
+}
+
+.no-notifications {
+    color: #777;
+    font-size: 14px;
+    text-align: center;
+    padding: 8px 0;
+}
+
+.view-all {
+    text-align: center;
+    display: block;
+    margin-top: 6px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.view-all:hover {
+    text-decoration: underline;
 }

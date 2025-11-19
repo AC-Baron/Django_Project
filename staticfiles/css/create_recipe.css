@@ -1,0 +1,116 @@
+.create-recipe-container form {
+  max-width: 700px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.create-recipe-container h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.create-recipe-container fieldset {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 25px;
+  border-radius: 8px;
+}
+
+.create-recipe-container legend {
+  font-weight: 600;
+  color: #555;
+}
+
+.create-recipe-container .ingredient-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.create-recipe-container .ingredient-form label {
+  display: none;
+}
+
+.create-recipe-container .ingredient-form input {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.create-recipe-container .remove-ingredient {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.create-recipe-container #add-ingredient {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.create-recipe-container .submit-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  display: block;
+  margin: 20px auto 0 auto;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.create-recipe-container .submit-btn:hover {
+  background: #0056b3;
+}
+
+.create-recipe-container .remove-ingredient:hover {
+  background: #e60000;
+}
+
+.create-recipe-container #add-ingredient:hover {
+  background: #218838;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+
+    .create-recipe-container #recipe-form {
+        padding: 10px;
+    }
+
+    .create-recipe-container .ingredient-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .create-recipe-container .remove-ingredient {
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .create-recipe-container #add-ingredient {
+        width: 100%;
+        text-align: center;
+    }
+
+    .create-recipe-container .submit-btn {
+        width: 100%;
+    }
+}

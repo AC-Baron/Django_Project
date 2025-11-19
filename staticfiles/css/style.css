@@ -2,7 +2,7 @@
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
-  background-color: #8e91a8;
+  background-color: #F5F5DC;
   color: #333;
 }
 
@@ -114,6 +114,7 @@ body {
     text-decoration: none;
     color: #333;
     font-weight: bold;
+    transition: background 0.2s ease-in-out;
 }
 
 .back-btn:hover {
@@ -129,6 +130,7 @@ body {
     text-decoration: none;
     color: #333;
     font-weight: bold;
+    transition: background 0.2s ease-in-out;
 }
 
 /* Hamburger icon hidden on desktop */
@@ -150,6 +152,7 @@ body {
   /* Show hamburger */
   .hamburger {
     display: block;
+    color: #ccc;
   }
 
   /* Hide normal nav */

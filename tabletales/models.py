@@ -8,7 +8,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     description = models.TextField(blank=True)  # optional short summary
-    image = models.ImageField(upload_to='recipes/', default='recipes/default.png', blank=True, null=True)
+    image = models.ImageField(upload_to='recipes/', default='recipes/default_recipe.png', blank=True, null=True)
     instructions = models.TextField(help_text="Enter each step on a new line")
     created_on = models.DateTimeField(auto_now_add=True)
 

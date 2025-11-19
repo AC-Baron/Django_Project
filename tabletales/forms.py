@@ -28,5 +28,5 @@ class IngredientForm(forms.ModelForm):
 # Inline formset: allows editing ingredients alongside the recipe
 IngredientFormSet = inlineformset_factory(
     Recipe, Ingredient, form=IngredientForm,
-    extra=3, can_delete=True
+    extra=1, can_delete=True
 )

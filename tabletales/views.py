@@ -9,6 +9,16 @@ from django.forms import inlineformset_factory
 from django.contrib.auth import login
 from .forms import SignUpForm
 
+from django.http import FileResponse, Http404
+from django.conf import settings
+import os
+
+def serve_media(request, path):
+    """Serve media files in production"""
+    file_path = os.path.join(settings.MEDIA_ROOT, path)
+    if os.path.exists(file_path):
+        return FileResponse(open(file_path, 'rb'))
+    raise Http404("Media file not found")
 
 #Signup view
 def signup_view(request):

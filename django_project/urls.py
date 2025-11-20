@@ -16,11 +16,11 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from tabletales import views
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.views.static import serve
 
 urlpatterns = [
     path('', views.recipe_list, name='recipe_list'),
@@ -32,7 +32,6 @@ urlpatterns = [
 
     path('accounts/', include('django.contrib.auth.urls')),
     path('account/', views.account, name='account'),
-    path('admin/', admin.site.urls),
 
     path('comment/<int:comment_id>/edit/', views.edit_comment, name='edit_comment'),
     path('comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
@@ -44,8 +43,9 @@ urlpatterns = [
     path("signup/", views.signup_view, name="signup"),
 
     path('notifications/', views.notifications_page, name='notifications'),
-
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Serve media files (always, for production)
+urlpatterns += [
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+]

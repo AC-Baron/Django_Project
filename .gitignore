@@ -6,3 +6,4 @@ venv/
 staticfiles/
 .env
 *.log
+env.py

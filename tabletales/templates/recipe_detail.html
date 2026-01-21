@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 
 <div class="detail-buttons">
@@ -11,41 +12,46 @@
 
 
 
-<h1>{{ recipe.title }}</h1>
-<p><em>by {{ recipe.author.username }}</em></p>
+
+<h1 class="recipe-title1">{{ recipe.title }}</h1>
+<p class="recipe-author1"><em>by {{ recipe.author.username }}</em></p>
 
 <!-- Favorite Button -->
-<form action="{% url 'toggle_favorite' recipe.pk %}" method="post" style="display:inline;">
-    {% csrf_token %}
-    {% if user.is_authenticated %}
-        <button type="submit" style="border:none; background:none; cursor:pointer; font-size:24px;">
-            {% if user in recipe.favorited_by.all %}
-                ❤️ <!-- filled heart if already favorited -->
-            {% else %}
-                🤍 <!-- empty heart if not favorited -->
-            {% endif %}
-        </button>
-    {% else %}
-        <a href="{% url 'login' %}">Log in to favorite</a>
-    {% endif %}
-</form>
+<div class="favorite-container">
+  <form action="{% url 'toggle_favorite' recipe.pk %}" method="post" style="display:inline;">
+      {% csrf_token %}
+      {% if user.is_authenticated %}
+          <button type="submit" class="favorite-btn" style="border:none; background:none; cursor:pointer; font-size:24px;">
+              {% if user in recipe.favorited_by.all %}
+                  ❤️ <!-- filled heart if already favorited -->
+              {% else %}
+                  🤍 <!-- empty heart if not favorited -->
+              {% endif %}
+          </button>
+      {% else %}
+          <a href="{% url 'login' %}">Log in to favorite</a>
+      {% endif %}
+  </form>
+</div>
 
-<h3>Ingredients</h3>
-<table>
-  {% for ingredient in recipe.ingredients.all %}
-  <tr>
-    <td>• {{ ingredient.name }}</td>
-    <td style="padding-left: 15px;">{{ ingredient.quantity }}</td>
-  </tr>
-  {% endfor %}
-</table>
+<div class="recipe-detail-container">
+  <h3>Ingredients</h3>
+  <table>
+    {% for ingredient in recipe.ingredients.all %}
+    <tr>
+      <td>• {{ ingredient.name }}</td>
+      <td style="padding-left: 15px;">{{ ingredient.quantity }}</td>
+    </tr>
+    {% endfor %}
+  </table>
 
-<h3>Instructions</h3>
-<ol>
-  {% for step in recipe.get_instruction_steps %}
-    <li>{{ step }}</li>
-  {% endfor %}
-</ol>
+  <h3>Instructions</h3>
+  <ol>
+    {% for step in recipe.get_instruction_steps %}
+      <li>{{ step }}</li>
+    {% endfor %}
+  </ol>
+</div>
 
 <!-- Comments Section -->
 <h3>Comments</h3>
@@ -97,5 +103,6 @@
   {% endfor %}
 </div>
 
-
+<!-- External CSS -->
+<link rel="stylesheet" href="{% static 'css/recipe_detail.css' %}">
 {% endblock %}

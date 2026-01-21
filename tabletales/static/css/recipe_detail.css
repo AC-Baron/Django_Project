@@ -1,0 +1,38 @@
+.recipe-detail-container {
+  max-width: 800px;
+  margin: 30px auto;
+  background: #84faa7;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 2px solid black;
+}
+
+.recipe-title1 {
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.recipe-author1 {
+  color: #777;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.favorite-container {
+    text-align: center;
+    margin: 10px 0 20px;
+}
+
+.favorite-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 28px;
+    transition: transform 0.2s ease;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.2);
+}
+

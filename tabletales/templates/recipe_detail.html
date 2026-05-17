@@ -16,6 +16,12 @@
 <h1 class="recipe-title1">{{ recipe.title }}</h1>
 <p class="recipe-author1"><em>by {{ recipe.author.username }}</em></p>
 
+{% if recipe.description %}
+<div class="recipe-description">
+  <p>{{ recipe.description }}</p>
+</div>
+{% endif %}
+
 <!-- Favorite Button -->
 <div class="favorite-container">
   <form action="{% url 'toggle_favorite' recipe.pk %}" method="post" style="display:inline;">

@@ -144,8 +144,8 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', ''),
 }
 
-# Use Cloudinary storage only when all required credentials are provided.
-# Otherwise fall back to default file storage so Heroku doesn't crash on image fields.
+# Use Cloudinary storage whenever credentials are configured.
+# Fall back to local filesystem storage only when Cloudinary is not available.
 if all(CLOUDINARY_STORAGE.values()):
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 else:

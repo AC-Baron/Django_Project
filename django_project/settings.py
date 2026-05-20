@@ -144,9 +144,12 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', ''),
 }
 
-# Use Cloudinary storage whenever credentials are configured.
-# Fall back to local filesystem storage only when Cloudinary is not available.
-if all(CLOUDINARY_STORAGE.values()):
+# Use Cloudinary storage when Cloudinary credentials or URL are configured.
+use_cloudinary = bool(
+    os.environ.get('CLOUDINARY_URL') or all(CLOUDINARY_STORAGE.values())
+)
+
+if use_cloudinary:
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 else:
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

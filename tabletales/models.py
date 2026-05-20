@@ -1,5 +1,7 @@
 # tabletales/models.py
+import os
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 
 
@@ -19,10 +21,20 @@ class Recipe(models.Model):
 
     @property
     def image_url(self):
+        if not self.image:
+            return None
+
         try:
             return self.image.url
         except Exception:
+            pass
+
+        cloud_name = settings.CLOUDINARY_STORAGE.get('CLOUD_NAME') or os.environ.get('CLOUDINARY_CLOUD_NAME')
+        if not cloud_name or not self.image.name:
             return None
+
+        public_id = self.image.name.lstrip('/')
+        return f"https://res.cloudinary.com/{cloud_name}/image/upload/{public_id}"
 
     def __str__(self):
         return self.title

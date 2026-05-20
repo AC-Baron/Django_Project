@@ -82,6 +82,23 @@
         </ul>
     </nav>
 
+    {% if cloudinary_debug %}
+      <div class="cloudinary-debug-banner">
+        <p>
+          Cloudinary status:
+          {% if cloudinary_configured %}
+            <strong>configured</strong>
+          {% else %}
+            <strong style="color:red;">not configured</strong>
+          {% endif %}
+          · storage backend: <code>{{ cloudinary_storage_backend }}</code>
+        </p>
+        {% if not cloudinary_configured %}
+          <p style="margin:0; color:red;">Set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET or CLOUDINARY_URL in Heroku config.</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
     {% block content %}
     {% endblock %}
 </body>

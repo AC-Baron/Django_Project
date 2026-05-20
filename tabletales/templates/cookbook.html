@@ -43,8 +43,8 @@
 
             <!-- Image -->
             <div class="recipe-image-container">
-              {% if recipe.image %}
-                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
+              {% if recipe.image_url %}
+                <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}" class="recipe-image">
               {% else %}
                 <img src="{% static 'images/default_recipe.png' %}" alt="Default image" class="recipe-image">
               {% endif %}
@@ -101,8 +101,8 @@
 
             <!-- Image -->
             <div class="recipe-image-container">
-              {% if recipe.image %}
-                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
+              {% if recipe.image_url %}
+                <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}" class="recipe-image">
               {% else %}
                 <img src="{% static 'images/default_recipe.png' %}" alt="Default image" class="recipe-image">
               {% endif %}

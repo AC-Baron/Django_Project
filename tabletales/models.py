@@ -17,6 +17,13 @@ class Recipe(models.Model):
     def get_instruction_steps(self):
         return [step.strip() for step in self.instructions.split('\n') if step.strip()]
 
+    @property
+    def image_url(self):
+        try:
+            return self.image.url
+        except Exception:
+            return None
+
     def __str__(self):
         return self.title
 

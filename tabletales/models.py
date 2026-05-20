@@ -5,6 +5,20 @@ from django.conf import settings
 from django.contrib.auth.models import User
 
 
+def get_cloudinary_cloud_name():
+    cloud_name = settings.CLOUDINARY_STORAGE.get('CLOUD_NAME') or os.environ.get('CLOUDINARY_CLOUD_NAME')
+    if cloud_name:
+        return cloud_name
+
+    cloud_url = os.environ.get('CLOUDINARY_URL')
+    if cloud_url and cloud_url.startswith('cloudinary://'):
+        try:
+            return cloud_url.split('@', 1)[1]
+        except IndexError:
+            return None
+    return None
+
+
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -21,20 +35,19 @@ class Recipe(models.Model):
 
     @property
     def image_url(self):
-        if not self.image:
+        if not self.image or not self.image.name:
             return None
+
+        cloud_name = get_cloudinary_cloud_name()
+        image_name = self.image.name.lstrip('/')
+
+        if cloud_name:
+            return f"https://res.cloudinary.com/{cloud_name}/image/upload/{image_name}"
 
         try:
             return self.image.url
         except Exception:
-            pass
-
-        cloud_name = settings.CLOUDINARY_STORAGE.get('CLOUD_NAME') or os.environ.get('CLOUDINARY_CLOUD_NAME')
-        if not cloud_name or not self.image.name:
             return None
-
-        public_id = self.image.name.lstrip('/')
-        return f"https://res.cloudinary.com/{cloud_name}/image/upload/{public_id}"
 
     def __str__(self):
         return self.title

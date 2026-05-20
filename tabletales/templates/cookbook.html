@@ -49,9 +49,6 @@
                 <img src="{% static 'images/default_recipe.png' %}" alt="Default image" class="recipe-image">
               {% endif %}
             </div>
-            {% if user.is_staff %}
-              <div class="image-debug">Image URL: {{ recipe.image_url }}</div>
-            {% endif %}
 
             <!-- Title -->
             <div class="recipe-info">
@@ -110,9 +107,6 @@
                 <img src="{% static 'images/default_recipe.png' %}" alt="Default image" class="recipe-image">
               {% endif %}
             </div>
-            {% if user.is_staff %}
-              <div class="image-debug">Image URL: {{ recipe.image_url }}</div>
-            {% endif %}
 
             <!-- Title -->
             <div class="recipe-info">

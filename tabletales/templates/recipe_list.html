@@ -30,6 +30,9 @@
         {% endif %}
         <h2 class="recipe-title">{{ recipe.title }}</h2>
       </a>
+      {% if user.is_staff %}
+        <div class="image-debug">Image URL: {{ recipe.image_url }}</div>
+      {% endif %}
       <p class="recipe-author">By {{ recipe.author.username }}</p>
     </div>
   {% empty %}
